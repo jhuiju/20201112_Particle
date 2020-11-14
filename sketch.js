@@ -3,7 +3,7 @@
 let systems = [];
 
 function setup() {
-  let text = createP("click to add particle systems");
+  let text = createP("click to add rain");
   text.position(10, 730);
 
   createCanvas(1080, 720);
@@ -12,15 +12,15 @@ function setup() {
 function draw() {
   background(0, 0, 0, 25);
   for (let i = 0; i < systems.length; i++) {
-    systems[i].addParticle();
+    systems[i].addRain();
     systems[i].run();
   }
 }
 
 function mousePressed() {
-  systems.push(new ParticleSystem(1, createVector(mouseX, mouseY)));
+  systems.push(new RainSystem(1, createVector(mouseX, mouseY)));
 }
-class Particle {
+class Rain {
   constructor(position) {
     this.acceleration = createVector(0, 0.06);
     this.velocity = createVector(random(-1, 1), random(-1, 0));
@@ -48,7 +48,7 @@ class Particle {
     ellipse(this.position.x, this.position.y, 8, 8);
   }
 
-  // Is the particle still useful?
+  // Is the rain still useful?
   isDead() {
     if (this.lifespan < 0.0) {
       return true;
@@ -57,23 +57,23 @@ class Particle {
     }
   }
 }
-class ParticleSystem {
+class RainSystem {
   constructor(num, position) {
     this.origin = position.copy();
-    this.particles = [];
+    this.rains = [];
     for (let i = 0; i < num; i++) {
-      this.particles.push(new Particle(this.origin));
+      this.rains.push(new Rain(this.origin));
     }
   }
 
-  addParticle() {
-    this.particles.push(new Particle(this.origin));
+  addRain() {
+    this.rains.push(new Rain(this.origin));
   }
 
   run() {
-    for (let particle of this.particles) {
-      particle.run();
+    for (let rain of this.rains) {
+      rain.run();
     }
-    this.particles = this.particles.filter(particle => !particle.isDead());
+    this.rains = this.rains.filter(rain => !rain.isDead());
   }
 }
